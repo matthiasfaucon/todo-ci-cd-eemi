@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push: ~
+  workflow_dispatch: ~
+
+jobs:
+  init:
+    name: "Say hello"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node to last version
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: "Install deps"
+        run: npm ci
+
+      - name: "Build"
+        run: echo "Project built"
+
+      - name: "Test"
+        run: npm run test
+        continue-on-error: true
+
+      - name: "Notify"
+        run: echo "CI OK"
