@@ -7,7 +7,8 @@ jobs:
         name: "Say Hello World"
         runs-on: ubuntu-latest
         steps:
-            - name: "First step"
-              run: |
-                echo "Hello World"
-                echo "Coucou la deuxième ligne" 
+            - name: "Checkout Repository"
+              uses: actions/checkout@v4
+
+            - name: "Install Dependancies"
+              run: npm i
