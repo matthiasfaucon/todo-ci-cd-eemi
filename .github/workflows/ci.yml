@@ -1,14 +1,46 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push, workflow_dispatch]
+# on: [push, workflow_dispatch]
+on:
+  push: ~
+  workflow_dispatch: ~
 
 jobs:
-    init:
-        name: "Say Hello World"
-        runs-on: ubuntu-latest
-        steps:
-            - name: "Checkout Repository"
-              uses: actions/checkout@v4
+  init:
+    name: "Say Hello World"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository" # Pour récupérer le code
+        uses: actions/checkout@v4
 
-            - name: "Install Dependancies"
-              run: npm i
+      - name: "Setup node to last version"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: latest
+
+      - name: "Install Dependancies"
+        run: |
+          node -v
+          npm ci
+    
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build the project"
+        run: echo "Ton projet il est build"
+  
+  test:
+    name: "Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Make the tests"
+        run: npm run test
+        continue-on-error: true
+    
+  notify:
+    name: "Notify me"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Notify when It's finish"
+        run: echo "CI OK"
