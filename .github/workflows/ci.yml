@@ -39,7 +39,9 @@ jobs:
         id: cache-node_modules
         uses: actions/cache@v3
         with:
-          path: '**/**'
+          path: |
+            'node_modules'
+            'package.json'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
       - name: "Display files"
         run: ls
@@ -55,16 +57,18 @@ jobs:
         id: cache-node_modules
         uses: actions/cache@v3
         with:
-          path: '**/**'
+          path: |
+            'node_modules'
+            'package.json'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
       - name: "Make the tests"
         run: npm run test
         continue-on-error: true
     
-  # notify:
-  #   needs: ["test"]
-  #   name: "Notify me"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Notify when It's finish"
-  #       run: echo "CI OK"
+  notify:
+    needs: ["test"]
+    name: "Notify me"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Notify when It's finish"
+        run: echo "CI OK"
