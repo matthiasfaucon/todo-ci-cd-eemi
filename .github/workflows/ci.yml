@@ -25,6 +25,7 @@ jobs:
     name: "Build project"
     runs-on: "ubuntu-latest"
     steps:
+      - run: ls
       - name: "Build"
         run: echo "Project built"
 
