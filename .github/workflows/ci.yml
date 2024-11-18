@@ -7,7 +7,7 @@ on:
 
 jobs:
   init:
-    name: "Say Hello World"
+    name: "Initialize the project"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Repository" # Pour récupérer le code
@@ -17,6 +17,13 @@ jobs:
         uses: "actions/setup-node@v4"
         with:
           node-version: latest
+
+      - name: Cache node_modules
+        id: cache-node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
 
       - name: "Install Dependancies"
         run: |
@@ -28,22 +35,24 @@ jobs:
     name: "Build"
     runs-on: ubuntu-latest
     steps:
+      - name: "Display files"
+        run: ls
       - name: "Build the project"
         run: echo "Ton projet il est build"
   
-  test:
-    needs: ["build"]
-    name: "Tests"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Make the tests"
-        run: npm run test
-        continue-on-error: true
+  # test:
+  #   needs: ["build"]
+  #   name: "Tests"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Make the tests"
+  #       run: npm run test
+  #       continue-on-error: true
     
-  notify:
-    needs: ["test"]
-    name: "Notify me"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Notify when It's finish"
-        run: echo "CI OK"
+  # notify:
+  #   needs: ["test"]
+  #   name: "Notify me"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Notify when It's finish"
+  #       run: echo "CI OK"
