@@ -12,6 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: "Cache node_modules"
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: node_modules
+
       - name: Setup node to last version
         uses: actions/setup-node@v4
         with:
