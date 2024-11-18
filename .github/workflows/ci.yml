@@ -5,7 +5,7 @@ on:
   workflow_dispatch: ~
 
 jobs:
-  init:
+  prepare:
     name: "Install deps"
     runs-on: ubuntu-latest
     steps:
@@ -21,13 +21,31 @@ jobs:
         run: npm ci
 
   build:
+    needs: ["prepare"]
     name: "Build project"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Build"
         run: echo "Project built"
 
-  tests:
+  test_unit:
+    needs: ["build"]
+    name: "Test project"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        run: npm run test
+        continue-on-error: true
+  test_integration:
+    needs: ["build"]
+    name: "Test project"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        run: npm run test
+        continue-on-error: true
+  test_e2e:
+    needs: ["build"]
     name: "Test project"
     runs-on: "ubuntu-latest"
     steps:
@@ -36,6 +54,7 @@ jobs:
         continue-on-error: true
 
   notify:
+    needs: ["test_unit", "test_integration", "test_e2e"]
     name: "Notify author"
     runs-on: "ubuntu-latest"
     steps:
