@@ -23,8 +23,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            'node_modules'
-            'package.json'
+            node_modules
+            package.json
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
 
       - name: "Install Dependancies"
@@ -42,8 +42,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            'node_modules'
-            'package.json'
+            node_modules
+            package.json
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
       - name: "Display files"
         run: ls
@@ -60,8 +60,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            'node_modules'
-            'package.json'
+            node_modules
+            package.json
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
       - name: "Make the tests"
         run: npm run test
