@@ -6,7 +6,7 @@ on:
 
 jobs:
   init:
-    name: "Say hello"
+    name: "Install deps"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,12 +20,26 @@ jobs:
       - name: "Install deps"
         run: npm ci
 
+  build:
+    name: "Build project"
+    runs-on: "ubuntu-latest"
+    steps:
       - name: "Build"
         run: echo "Project built"
 
+  tests:
+    name: "Test project"
+    runs-on: "ubuntu-latest"
+    steps:
       - name: "Test"
         run: npm run test
         continue-on-error: true
 
+  notify:
+    name: "Notify author"
+    runs-on: "ubuntu-latest"
+    steps:
       - name: "Notify"
-        run: echo "CI OK"
+        run: |
+          env
+          echo "CI OK"
