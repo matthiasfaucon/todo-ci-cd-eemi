@@ -24,6 +24,7 @@ jobs:
           npm ci
     
   build:
+    needs: ["init"]
     name: "Build"
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +32,7 @@ jobs:
         run: echo "Ton projet il est build"
   
   test:
+    needs: ["build"]
     name: "Tests"
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +41,7 @@ jobs:
         continue-on-error: true
     
   notify:
+    needs: ["test"]
     name: "Notify me"
     runs-on: ubuntu-latest
     steps:
