@@ -4,7 +4,9 @@
   "description": "TO-DO List using Nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:unit": "npm run test -- --selectProjects unit-tests",
+    "test:integration": "npm run test -- --selectProjects integration-tests",
+    "test:e2e": "npm run test -- --selectProjects e2e-tests",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -25,5 +27,9 @@
     "izitoast": "^1.4.0",
     "mongoose": "^7.0.0",
     "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0"
   }
 }

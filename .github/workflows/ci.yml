@@ -44,11 +44,11 @@ jobs:
 
   test_unit:
     needs: ["build"]
-    name: "Test project"
+    name: "Unit Tests"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Test"
-        run: npm run test
+      - name: "Run Unit Tests"
+        run: npm run test:unit
         continue-on-error: true
   test_integration:
     needs: ["build"]
@@ -56,15 +56,15 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Test"
-        run: npm run test
+        run: npm run test:integration
         continue-on-error: true
   test_e2e:
     needs: ["build"]
-    name: "Test project"
+    name: "Integrations Test"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Test"
-        run: npm run test
+      - name: "Run Integrations Tests"
+        run: npm run test:e2e
         continue-on-error: true
 
   notify:
