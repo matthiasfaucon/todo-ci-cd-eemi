@@ -1,76 +1,78 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on: [push, workflow_dispatch]
+name: CI
+
 on:
   push: ~
   workflow_dispatch: ~
 
 jobs:
-  init:
-    name: "Initialize the project"
+  prepare:
+    name: "Install deps"
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout Repository" # Pour récupérer le code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: "Setup node to last version"
-        uses: "actions/setup-node@v4"
+      - name: "Cache node_modules"
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Setup node to last version
+        uses: actions/setup-node@v4
         with:
           node-version: latest
 
-      - name: Cache node_modules
-        id: cache-node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            package.json
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
+      - name: "Install deps"
+        run: npm ci
 
-      - name: "Install Dependancies"
-        run: |
-          node -v
-          npm ci
-    
   build:
-    needs: ["init"]
-    name: "Build"
-    runs-on: ubuntu-latest
+    needs: ["prepare"]
+    name: "Build project"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: Cache node_modules
-        id: cache-node_modules
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Restore node_modules
         uses: actions/cache/restore@v4
         with:
-          path: |
-            node_modules
-            package.json
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
-      - name: "Display files"
-        run: ls
-      - name: "Build the project"
-        run: echo "Ton projet il est build"
-  
-  test:
+          path: ./node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+      - run: ls
+      - name: "Build"
+        run: echo "Project built"
+
+  test_unit:
     needs: ["build"]
-    name: "Tests"
-    runs-on: ubuntu-latest
+    name: "Unit Tests"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: Cache node_modules
-        id: cache-node_modules
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            node_modules
-            package.json
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
-      - name: "Make the tests"
-        run: npm run test
+      - name: "Run Unit Tests"
+        run: npm run test:unit
         continue-on-error: true
-    
-  notify:
-    needs: ["test"]
-    name: "Notify me"
-    runs-on: ubuntu-latest
+  test_integration:
+    needs: ["build"]
+    name: "Test project"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: "Notify when It's finish"
-        run: echo "CI OK"
+      - name: "Test"
+        run: npm run test:integration
+        continue-on-error: true
+  test_e2e:
+    needs: ["build"]
+    name: "Integrations Test"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Run Integrations Tests"
+        run: npm run test:e2e
+        continue-on-error: true
+
+  notify:
+    needs: ["test_unit", "test_integration", "test_e2e"]
+    name: "Notify author"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Notify"
+        run: |
+          env
+          echo "CI OK"
