@@ -4,6 +4,7 @@
   "description": "TO-DO List using Nodejs",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "test:unit": "npm run test -- --selectProjects unit-tests",
     "test:integration": "npm run test -- --selectProjects integration-tests",
     "test:e2e": "npm run test -- --selectProjects e2e-tests",
