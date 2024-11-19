@@ -4,10 +4,10 @@
   "description": "TO-DO List using Nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:unit": "npm run test -- --selectProjects unit-tests",
-    "test:integration": "npm run test -- --selectProjects integration-tests",
-    "test:e2e": "npm run test -- --selectProjects e2e-tests",
+    "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:unit": "jest --selectProjects unit-tests",
+    "test:integration": "jest --selectProjects integration-tests",
+    "test:e2e": "jest --selectProjects e2e-tests",
     "start": "nodemon index.js"
   },
   "repository": {

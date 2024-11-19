@@ -49,29 +49,43 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: "Run Unit Tests"
+      - name: Restore node_modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ./node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+      - name: "Test"
         run: npm run test:unit
-        continue-on-error: true
+
   test_integration:
     needs: ["build"]
-    name: "Test project"
+    name: "Integration Test"
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Restore node_modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ./node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
       - name: "Test"
         run: npm run test:integration
-        continue-on-error: true
+
   test_e2e:
     needs: ["build"]
-    name: "Integrations Test"
+    name: "E2E Test"
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: "Run Integrations Tests"
+      - name: Restore node_modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ./node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+      - name: "Test"
         run: npm run test:e2e
-        continue-on-error: true
 
   notify:
     needs: ["test_unit", "test_integration", "test_e2e"]
