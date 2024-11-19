@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:unit": "npm run test -- --selectProjects unit-tests",
-    "test:integration": "npm run test -- --selectProjects integration-tests",
-    "test:e2e": "npm run test -- --selectProjects e2e-tests",
+    "test:unit": "npm run jest -- --selectProjects unit-tests",
+    "test:integration": "npm run jest -- --selectProjects integration-tests",
+    "test:e2e": "npm run jest -- --selectProjects e2e-tests",
     "start": "nodemon index.js"
   },
   "repository": {
